@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "addtocart": "mocha test/addToCartTest.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "selenium-webdriver": "^4.29.0"
+  },
+  "devDependencies": {
+    "mocha": "^11.1.0"
   }
 }
