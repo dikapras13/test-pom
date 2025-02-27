@@ -1,60 +1,74 @@
-const {
-    Builder,
-    By
-} = require("selenium-webdriver");
-const assert = require('assert');
-const testData = require("../fixtures/testData.json");
-const LoginPage = require("../pages/loginPage");
-const InventoryPage = require("../pages/inventoryPage");
-const fs = require("fs")
-const path = require("path")
-const screenshotDir = path.join(__dirname, '../screenshots');
+const { Builder, By } = require("selenium-webdriver"); // Mengimpor modul Selenium WebDriver
+const assert = require('assert'); // Mengimpor modul assert untuk validasi pengujian
+const testData = require("../fixtures/testData.json"); // Mengimpor data pengujian dari file JSON
+const LoginPage = require("../pages/loginPage"); // Mengimpor kelas LoginPage dari file loginPage.js
+const InventoryPage = require("../pages/inventoryPage"); // Mengimpor kelas InventoryPage dari file inventoryPage.js
+const fs = require("fs"); // Mengimpor modul file system untuk menangani file
+const path = require("path"); // Mengimpor modul path untuk manipulasi direktori atau file
+
+
+// Menentukan direktori untuk menyimpan screenshot hasil pengujian
+const screenshotDir = path.join(__dirname, "../screenshots");
 if (!fs.existsSync(screenshotDir)) {
-    fs.mkdirSync(screenshotDir);
+  fs.mkdirSync(screenshotDir);
 }
 
 describe("saucedemo add to cart", function () {
-    let driver;
-    let browserName = "chrome";
-    let loginPage;
-    let inventoryPage;
-    this.timeout(20000);
+  let driver;
+  let browserName = "chrome";
+  let loginPage;
+  let inventoryPage;
+  this.timeout(20000);
 
-    beforeEach(async function () {
-        //membuat koneksi dengan browser
-        driver = await new Builder().forBrowser(browserName).build();
-        loginPage = new LoginPage(driver);
-        inventoryPage = new InventoryPage(driver);
+  beforeEach(async function () {
+    // // Menginisiasi  WebDriver untuk membuka browser
+    driver = await new Builder().forBrowser(browserName).build();
 
-        //mengakses website Saucedemo
-        await loginPage.open(testData.baseUrl);
+    // Menginisiasi variabel untuk menyimpan objek dari kelas agar dapat berinteraksi dengan halaman test
+    loginPage = new LoginPage(driver);
+    inventoryPage = new InventoryPage(driver);
 
+    // Mengakses halaman login di Saucedemo
+    await loginPage.open(testData.baseUrl);
 
-        //menginputkan username dan password
-        await loginPage.login(testData.validUser.username, testData.validUser.password);
-        await driver.sleep(1000);
+    // Melakukan login dengan kredensial yang valid
+    await loginPage.login(
+      testData.validUser.username,
+      testData.validUser.password
+    );
+    await driver.sleep(1000);
 
-        // validasi apakah sudah berhasil menampilkan halaman dashboard
-        await inventoryPage.getTitleText('Products', "Title does not include Products");
-        await driver.sleep(3000);
+    // Memastikan halaman produk ditampilkan dengan judul yang sesuai
+    await inventoryPage.getTitleText(
+      "Products",
+      "Title does not include Products"
+    );
+    await driver.sleep(3000);
+  });
 
-    });
+  it("add to cart test", async function () {
+    // Menambahkan produk ke dalam keranjang
+    await inventoryPage.addToCart();
 
-    it("add to cart test", async function () {
+    // Memeriksa apakah produk berhasil ditambahkan ke keranjang
+    await inventoryPage.assertAddToCart("You haven't selected a product yet");
+    await driver.sleep(3000);
 
-        // Menambahkan produk ke keranjang belanja
-        await inventoryPage.addToCart();
+    console.log("Test login success!");
+  });
 
-        // Validasi apakah produk berhasil ditambahkan ke keranjang
-        await inventoryPage.assertAddToCart("You haven't selected a product yet");
-        await driver.sleep(3000);
-
-        console.log("Test login success!");
-    });
-
-    afterEach(async function () {
-        const image = await driver.takeScreenshot();
-        fs.writeFileSync(path.join(screenshotDir, `${this.test.title.replace(/[^a-zA-Z0-9-_]/g, "_")}.png`), image, "base64");
-        await driver.quit();
-    });
-})
+  afterEach(async function () {
+    // Mengambil screenshot hasil pengujian
+    const image = await driver.takeScreenshot();
+    fs.writeFileSync(
+      path.join(
+        screenshotDir,
+        `${this.test.title.replace(/[^a-zA-Z0-9-_]/g, "_")}.png`
+      ),
+      image,
+      "base64"
+    );
+    // Menutup browser setelah pengujian selesai
+    await driver.quit();
+  });
+});
