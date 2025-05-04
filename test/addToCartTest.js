@@ -46,18 +46,16 @@ describe("saucedemo add to cart", function () {
     );
     await driver.sleep(3000);
 
-    console.log("Test Login success!");
+    console.log("Login success!");
   });
 
   it("add to cart test", async function () {
     // Menambahkan produk ke dalam keranjang
     await inventoryPage.addToCart();
-    console.log("Test Addtocart success!");
     // Memeriksa apakah produk berhasil ditambahkan ke keranjang
     await inventoryPage.assertAddToCart("You haven't selected a product yet");
     await driver.sleep(3000);
-
-    
+    console.log("Addtocart success!");  
   });
 
   afterEach(async function () {
@@ -71,6 +69,7 @@ describe("saucedemo add to cart", function () {
       image,
       "base64"
     );
+    console.log("Capture success!"); 
     // Menutup browser setelah pengujian selesai
     await driver.quit();
   });
