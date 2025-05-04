@@ -14,16 +14,16 @@ if (!fs.existsSync(screenshotDir)) {
 
 describe("saucedemo add to cart", function () {
   let driver;
-  let browserName = "firefox";
+  let browserName = "chrome";
   let loginPage;
   let inventoryPage;
-  let options = new firefox.Options();
-  options.addArguments("--headless");
+  let options = new chrome.Options();
+  options.addArguments("--headless=new","--incognito");
   this.timeout(20000);
 
   beforeEach(async function () {
     // // Menginisiasi  WebDriver untuk membuka browser 
-    driver = await new Builder().forBrowser(browserName).setFirefoxOptions(options).build();
+    driver = await new Builder().forBrowser(browserName).setChromeOptions(options).build();
 
     // Menginisiasi variabel untuk menyimpan objek dari kelas agar dapat berinteraksi dengan halaman test
     loginPage = new LoginPage(driver);
