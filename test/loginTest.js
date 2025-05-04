@@ -2,9 +2,10 @@ const {
     Builder,
     By
 } = require("selenium-webdriver");
-const assert = require('assert');
+const chrome = require("selenium-webdriver/chrome");
 const LoginPage = require("../pages/loginPage");
 const InventoryPage = require("../pages/inventoryPage");
+const testData = require("../fixtures/testData.json");
 
 
 describe("saucedemo login test", function () {
@@ -12,21 +13,26 @@ describe("saucedemo login test", function () {
     let browserName = "chrome";
     let loginPage;
     let inventoryPage;
+    let options = new chrome.Options();
+    options.addArguments("--headless=new");
     this.timeout(20000);
 
     beforeEach(async function () {
         //membuat koneksi dengan browser
-        driver = await new Builder().forBrowser(browserName).build();
+        driver = await new Builder().forBrowser(browserName).setChromeOptions(options).build();
         loginPage = new LoginPage(driver);
         inventoryPage = new InventoryPage(driver);
 
         //mengakses website Saucedemo
-        await loginPage.open("https://www.saucedemo.com/");
+        await loginPage.open(testData.baseUrl);
     });
 
     it("login success", async function () {
         //menginputkan username dan password
-        await loginPage.login("standard_user","secret_sauce");
+        await loginPage.login(
+            testData.validUser.username,
+            testData.validUser.password
+          );
 
         // validasi apakah sudah berhasil menampilkan halaman dashboard
         await inventoryPage.asertTitleText('Products',"Title Does not include Swag Labs");
@@ -37,7 +43,10 @@ describe("saucedemo login test", function () {
 
     it("login failed", async function () {
         //menginputkan username dan password
-        await loginPage.login("standart_user","123456");
+        await loginPage.login(
+            testData.invalidUser.username,
+            testData.invalidUser.password
+          );
 
         // validasi error massage ketika gagal login
         await loginPage.assertLoginFailed('Username and password do not match any user in this service','Error massage not displayed properly');
