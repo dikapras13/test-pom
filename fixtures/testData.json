@@ -7,5 +7,10 @@
     "invalidUser" : {
         "username" : "standard_user",
         "password" : "123456"
+    },
+    "checkoutData" : {
+        "firstname" : "Dika",
+        "lastname" : "Pras",
+        "postalcode" : "64171"
     }
 }

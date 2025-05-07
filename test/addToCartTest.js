@@ -2,8 +2,8 @@ const { Builder, By } = require("selenium-webdriver"); // Mengimpor modul Seleni
 const chrome = require("selenium-webdriver/chrome");
 const firefox = require("selenium-webdriver/firefox");
 const testData = require("../fixtures/testData.json"); // Mengimpor data pengujian dari file JSON
-const LoginPage = require("../pages/loginPage"); // Mengimpor kelas LoginPage dari file loginPage.js
-const InventoryPage = require("../pages/inventoryPage"); // Mengimpor kelas InventoryPage dari file inventoryPage.js
+const LoginPage = require("../Pages/loginPage"); // Mengimpor kelas LoginPage dari file loginPage.js
+const InventoryPage = require("../Pages/inventoryPage"); // Mengimpor kelas InventoryPage dari file inventoryPage.js
 const fs = require("fs"); // Mengimpor modul file system untuk menangani file
 const path = require("path"); // Mengimpor modul path untuk manipulasi direktori atau file
 // Menentukan direktori untuk menyimpan screenshot hasil pengujian
@@ -12,7 +12,7 @@ if (!fs.existsSync(screenshotDir)) {
   fs.mkdirSync(screenshotDir);
 }
 
-describe("saucedemo add to cart", function () {
+describe("saucedemo add to cart test", function () {
   let driver;
   let browserName = "chrome";
   let loginPage;
@@ -40,10 +40,7 @@ describe("saucedemo add to cart", function () {
     await driver.sleep(1000);
 
     // Memastikan halaman produk ditampilkan dengan judul yang sesuai
-    await inventoryPage.getTitleText(
-      "Products",
-      "Title does not include Products"
-    );
+    await inventoryPage.asertTitleText('Products',"Title Does not include Products");
     await driver.sleep(3000);
 
     console.log("Login success!");
@@ -69,7 +66,8 @@ describe("saucedemo add to cart", function () {
       image,
       "base64"
     );
-    console.log("Capture success!"); 
+    // console.log("Capture success!"); 
+    
     // Menutup browser setelah pengujian selesai
     await driver.quit();
   });

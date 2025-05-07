@@ -6,11 +6,11 @@ class InventoryPage{
     constructor(driver){
         this.driver = driver;
 
-        // Locator untuk judul halaman
+        // Locator untuk halaman Inventory
         this.titleText = By.css('.title');
         this.backpack = By.id('add-to-cart-sauce-labs-backpack');
-        this.cartIcon = By.xpath("//span[@class='shopping_cart_badge']");
-        this.cartIcon1 = By.css('.shopping_cart_badge');
+        this.cartIcon = By.css('.shopping_cart_badge');
+        this.btnCart = By.css('.shopping_cart_link');
     }
 
     // Mengambil teks dari judul halaman
@@ -31,9 +31,13 @@ class InventoryPage{
 
     // Memeriksa apakah produk berhasil ditambahkan ke keranjang
     async assertAddToCart(assertMessage) {
-        let cart = await this.driver.findElement(this.cartIcon1);
+        let cart = await this.driver.findElement(this.cartIcon);
         assert.strictEqual(await cart.isDisplayed(), true, assertMessage);
         
+    }
+
+    async goToCart() {
+        await this.driver.findElement(this.btnCart).click();
     }
 }
 

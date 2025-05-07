@@ -3,8 +3,8 @@ const {
     By
 } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
-const LoginPage = require("../pages/loginPage");
-const InventoryPage = require("../pages/inventoryPage");
+const LoginPage = require("../Pages/loginPage");
+const InventoryPage = require("../Pages/inventoryPage");
 const testData = require("../fixtures/testData.json");
 
 
@@ -14,7 +14,7 @@ describe("saucedemo login test", function () {
     let loginPage;
     let inventoryPage;
     let options = new chrome.Options();
-    options.addArguments("--headless=new");
+    options.addArguments("--headless=new","--incognito");
     this.timeout(20000);
 
     beforeEach(async function () {
@@ -35,7 +35,7 @@ describe("saucedemo login test", function () {
           );
 
         // validasi apakah sudah berhasil menampilkan halaman dashboard
-        await inventoryPage.asertTitleText('Products',"Title Does not include Swag Labs");
+        await inventoryPage.asertTitleText('Products',"Title Does not include Products");
         await driver.sleep(5000);
 
         console.log("Test login success!");
