@@ -3,7 +3,7 @@ const {
     By
 } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
-const LoginPage = require("../Pages/loginPage");
+const LoginPage = require("../Pages/loginPage.js");
 const InventoryPage = require("../Pages/inventoryPage");
 const testData = require("../fixtures/testData.json");
 
